@@ -17,13 +17,9 @@ const postSchema = new mongoose.Schema({
         type:String
     },
 
-    likes:{
-        type: Number
-    },
+    likes:[],
 
-    comments:{
-        type:String
-    }
+    comments:[]
 })
 
 const Post = mongoose.model("Post", postSchema);

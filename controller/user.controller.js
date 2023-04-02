@@ -1,6 +1,6 @@
 const User = require("../model/user.model");
 const jwt = require("jsonwebtoken");
-const dotenv = require("dotenv")
+const dotenv = require("dotenv");
 dotenv.config();
 async function register(name, email, gender, password){
     let userFlag = await User.findOne({email});
@@ -49,7 +49,7 @@ async function login(email,password){
 
 async function  Verify(token){
   let user =  jwt.verify(token,process.env.SCECRET_TOKEN);
-
+  
   return user;
   
 }
@@ -61,8 +61,8 @@ function genrateToken(payload){
 }
 
 
-async function getUser(email){
-  let user = await User.findOne({email});
+async function getUser(id){
+  let user = await User.findOne({_id:id});
   console.log(user);
   let dta = user.toJSON();
   delete dta.password;

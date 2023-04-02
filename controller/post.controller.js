@@ -23,16 +23,17 @@ async function fetchPosts(){
     return posts;
 }
 
-async function findParticular(id,value){
-  let post;
-  if(value==1){
-    post = await Post.updateOne({_id:id},{$inc:{likes:1}});
+async function findParticular(id,userId){
+  let post = await Post.findOne({_id:id});
+    console.log(post)
+  if(post.likes.includes(userId)){
+    post = await Post.updateOne({_id:id},{$pull:{likes:userId}});
   }
-  else if(value==-1){
-    post = await Post.updateOne({_id:id},{$inc:{likes:-1}});
+
+  else{
+    post = await Post.updateOne({_id:id},{$push:{likes:userId}});
   }
   
-  console.log(post);
   return post;
 }
 
@@ -42,4 +43,19 @@ async function deleteParticular(id){
   return data;
 }
 
-module.exports={upload,fetchPosts, findParticular, deleteParticular};
+async function addComment(id, userId,name, comment){
+  let obj = {userId,comment,name}
+  console.log(obj)
+  let post = await Post.updateOne({_id:id},{$push:{comments:obj}});
+  console.log(post)
+  
+  return post;
+}
+
+async function deleteComment(id, comment){
+  let post = await Post.updateOne({_id:id},{$pull:{comments:{comment:comment}}});
+  console.log(post)
+  return post;
+}
+
+module.exports={upload,fetchPosts, findParticular, deleteParticular, addComment, deleteComment};
